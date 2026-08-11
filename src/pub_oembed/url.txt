@@ -1,0 +1,27 @@
+oEmbed Urls
+
+X - GET https://publish.x.com/oembed?url=<TWEET_URL>
+
+
+
+YT - GET https://www.youtube.com/oembed?url=<VIDEO_URL>&format=json
+
+
+
+Tiktok - GET https://www.tiktok.com/oembed?url=<VIDEO_URL>
+
+
+
+LinkedIn - none yet
+
+
+
+FB - GET https://graph.facebook.com/v21.0/oembed_post?url=<POST_URL>&access_token=<APP_ID>|<APP_SECRET>
+
+
+
+IG - GET https://graph.facebook.com/v21.0/instagram_oembed?url=<POST_URL>&access_token=<APP_ID>|<APP_SECRET>
+
+
+
+Thread - GET https://graph.threads.net/oembed?url=<POST_URL>&access_token=<APP_ID>|<APP_SECRET>
