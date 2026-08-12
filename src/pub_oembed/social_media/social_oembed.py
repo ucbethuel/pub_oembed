@@ -16,6 +16,13 @@ OEmbedKey = Literal[
     "version",
 ]
 
+platform_embed_endpoints = {
+    "x_twitter": "https://publish.x.com/oembed",
+    "tiktok": "https://www.tiktok.com/oembed",
+    "youtube": "https://www.youtube.com/oembed",
+    # "linkedin": "https://www.linkedin.com/oembed?",
+}
+
 
 class SocialOEmbed:
     """
@@ -30,11 +37,24 @@ class SocialOEmbed:
         Initialize the SocialOEmbed instance.
         """
         self._data = {}
-        self.json_data = {}
-        self.url = url
+        self._json_data = {}
+        
+        self._url = self.format_url(url) if url else None
+        
         if run_fetch and url:
             self.fetch_data()
+    
+    
+    # Get Object Properties
+    def get_url(self) -> str:
+        return self._url
+    def get_json_data(self) -> dict:
+        return self._json_data
+    def get_data_dict(self) -> dict:
+        return self._data
 
+
+    # Methods
     def fetch_data(self) -> dict:
         """
         Get the oEmbed JSON for the tweet URL.
@@ -42,17 +62,17 @@ class SocialOEmbed:
         Returns:
             dict: The oEmbed JSON response.
         """
-        self.url = self.format_url(self.url)
+        url = self.get_url()
         
         try:
             response = requests.get(
-                self.OEMBED_ENDPOINT, timeout=10, params={"url": self.url}
+                self.OEMBED_ENDPOINT, timeout=20, params={"url": url, "format": "json"}
             )
             self.json_data = response.json()
             return self.json_data
         except requests.RequestException as e:
-            print(f"Error fetching oEmbed for {self.url}: {e}")
-            return {}
+            print(f"Error fetching oEmbed for {url}: {e}")
+            return None
 
     def get_data(self, key: OEmbedKey) -> dict:
         """
@@ -65,10 +85,11 @@ class SocialOEmbed:
         Returns:
             dict: The stored oEmbed data.
         """
-        if self._data is None or not self._data:
+        data = self.get_data_dict()
+        if data is None or not data:
             raise ValueError("No data fetched. Please call fetch_data(url) first.")
 
-        return self._data.get(key, None)
+        return data.get(key, None)
 
     def data_map(self) -> dict:
         """
@@ -79,38 +100,41 @@ class SocialOEmbed:
         Returns:
             dict: The stored oEmbed data.
         """
+        json_data = self.get_json_data()
 
-        if self.json_data is None or not self.json_data:
+        if json_data is None or not json_data:
             raise ValueError("No data fetched. Please call fetch_data(url) first.")
         platform_name = self.PLATFORM_NAME if self.PLATFORM_NAME else "unknown"
 
+        url = self.get_url()
+        
         if platform_name == "x_twitter":
             self._data = {
-                "url": self.url,
-                "author_name": self.json_data.get("author_name"),
-                "author_url": self.json_data.get("author_url"),
-                "html": self.json_data.get("html"),
-                "width": self.json_data.get("width"),
-                "height": self.json_data.get("height"),
-                "type": self.json_data.get("type"),
-                "cache_age": self.json_data.get("cache_age"),
-                "provider_name": self.json_data.get("provider_name"),
-                "provider_url": self.json_data.get("provider_url"),
-                "version": self.json_data.get("version"),
+                "url": url,
+                "author_name": json_data.get("author_name"),
+                "author_url": json_data.get("author_url"),
+                "html": json_data.get("html"),
+                "width": json_data.get("width"),
+                "height": json_data.get("height"),
+                "type": json_data.get("type"),
+                "cache_age": json_data.get("cache_age"),
+                "provider_name": json_data.get("provider_name"),
+                "provider_url": json_data.get("provider_url"),
+                "version": json_data.get("version"),
             }
         elif platform_name == "tiktok":
             self._data = {
-                "url": self.url,
-                "author_name": self.json_data.get("author_name"),
-                "author_url": self.json_data.get("author_url"),
-                "html": self.json_data.get("html"),
-                "width": self.json_data.get("width"),
-                "height": self.json_data.get("height"),
-                "type": self.json_data.get("type") or self.json_data.get("embed_type"),
-                # "cache_age": self.json_data.get("cache_age"),
-                "provider_name": self.json_data.get("provider_name"),
-                "provider_url": self.json_data.get("provider_url"),
-                "version": self.json_data.get("version"),
+                "url": url,
+                "author_name": json_data.get("author_name"),
+                "author_url": json_data.get("author_url"),
+                "html": json_data.get("html"),
+                "width": json_data.get("width"),
+                "height": json_data.get("height"),
+                "type": json_data.get("type") or json_data.get("embed_type"),
+                # "cache_age": json_data.get("cache_age"),
+                "provider_name": json_data.get("provider_name"),
+                "provider_url": json_data.get("provider_url"),
+                "version": json_data.get("version"),
             }
         #             {
         #   "version": "1.0",
@@ -132,17 +156,17 @@ class SocialOEmbed:
         # }
         elif platform_name == "youtube":
             self._data = {
-                "url": self.url,
-                "author_name": self.json_data.get("author_name"),
-                "author_url": self.json_data.get("author_url"),
-                "html": self.json_data.get("html"),
-                "width": self.json_data.get("width"),
-                "height": self.json_data.get("height"),
-                "type": self.json_data.get("type"),
-                # "cache_age": self.json_data.get("cache_age"),
-                "provider_name": self.json_data.get("provider_name"),
-                "provider_url": self.json_data.get("provider_url"),
-                # "version": self.json_data.get("version"),
+                "url": url,
+                "author_name": json_data.get("author_name"),
+                "author_url": json_data.get("author_url"),
+                "html": json_data.get("html"),
+                "width": json_data.get("width"),
+                "height": json_data.get("height"),
+                "type": json_data.get("type"),
+                # "cache_age": json_data.get("cache_age"),
+                "provider_name": json_data.get("provider_name"),
+                "provider_url": json_data.get("provider_url"),
+                # "version": json_data.get("version"),
             }
         #                 {
         #   "title": "Why VDM will be the first to be evicted in the Big brother house 🤣🤣Kennyblaq",
@@ -168,7 +192,7 @@ class SocialOEmbed:
 
         return self._data
 
-
+    
 
     def format_url(self, url: str) -> str:
         """
@@ -176,10 +200,6 @@ class SocialOEmbed:
 
         Parameters:
             url (str): The original URL.
-            
-            x = "https://x.com/ucbethuel/status/1998024020726329831?s=20"
-
-result = x.split("?")[0]
         """
         
         formatted_url = url.split("?")[0]

@@ -6,5 +6,6 @@ dist/
 wheels/
 *.egg-info
 try.py
+url.txt
 # Virtual environments
 .venv
