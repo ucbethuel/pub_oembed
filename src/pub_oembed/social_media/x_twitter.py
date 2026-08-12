@@ -2,7 +2,7 @@ from typing import Literal
 
 import requests
 
-from pub_oembed.social_media.helper_class import SocialOEmbed
+from pub_oembed.social_media.social_oembed import SocialOEmbed
 # Token url
 # X - GET https://publish.x.com/oembed?url=<TWEET_URL>
 

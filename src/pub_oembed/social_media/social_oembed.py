@@ -42,6 +42,8 @@ class SocialOEmbed:
         Returns:
             dict: The oEmbed JSON response.
         """
+        self.url = self.format_url(self.url)
+        
         try:
             response = requests.get(
                 self.OEMBED_ENDPOINT, timeout=10, params={"url": self.url}
@@ -165,3 +167,25 @@ class SocialOEmbed:
             raise ValueError(f"Unsupported platform: {platform_name}")
 
         return self._data
+
+
+
+    def format_url(self, url: str) -> str:
+        """
+        Format the URL to ensure it is in the correct format for oEmbed.
+
+        Parameters:
+            url (str): The original URL.
+            
+            x = "https://x.com/ucbethuel/status/1998024020726329831?s=20"
+
+result = x.split("?")[0]
+        """
+        
+        formatted_url = url.split("?")[0]
+        
+        
+        return formatted_url
+
+
+
