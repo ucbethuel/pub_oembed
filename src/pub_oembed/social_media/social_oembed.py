@@ -1,6 +1,9 @@
 from typing import Literal
-
 import requests
+from urllib.parse import urlparse
+
+
+
 
 OEmbedKey = Literal[
     "url",
@@ -130,86 +133,16 @@ class SocialOEmbed:
         """
         json_data = self.get_json_data()
         data_dict = self.get_data_dict()
-        
-        if json_data is None or not json_data:
-            raise ValueError("No data fetched. Please call fetch_data(url) first.")
-        platform_name = self.PLATFORM_NAME if self.PLATFORM_NAME else "unknown"
-
-        url = self.get_url()
-        
-        if platform_name == "x_twitter":
-            data_dict = {
-                "url": url,
-                # "author_name": json_data.get("author_name"),
-                "author_url": json_data.get("author_url"),
-                "html": json_data.get("html"),
-                "width": json_data.get("width"),
-                "height": json_data.get("height"),
-                "type": json_data.get("type"),
-                "cache_age": json_data.get("cache_age"),
-                "provider_name": json_data.get("provider_name"),
-                "provider_url": json_data.get("provider_url"),
-                "version": json_data.get("version"),
+        if not data_dict:
+            mapped_data = {
+                key: json_data.get(key) for key in json_data.keys()
             }
-            self.set_data_dict(data_dict)
-            return data_dict
-        elif platform_name == "tiktok":
-            data_dict = {
-                "url": url,
-                # "author_name": json_data.get("author_name"),
-                "author_url": json_data.get("author_url"),
-                "html": json_data.get("html"),
-                "width": json_data.get("width"),
-                "height": json_data.get("height"),
-                "type": json_data.get("type") or json_data.get("embed_type"),
-                # "cache_age": json_data.get("cache_age"),
-                "provider_name": json_data.get("provider_name"),
-                "provider_url": json_data.get("provider_url"),
-                "version": json_data.get("version"),
-            }
-            self.set_data_dict(data_dict)
-            return data_dict
-        
-        elif platform_name == "youtube":
-            data_dict = {
-                "url": url,
-                # "author_name": json_data.get("author_name"),
-                "author_url": json_data.get("author_url"),
-                "html": json_data.get("html"),
-                "width": json_data.get("width"),
-                "height": json_data.get("height"),
-                "type": json_data.get("type"),
-                # "cache_age": json_data.get("cache_age"),
-                "provider_name": json_data.get("provider_name"),
-                "provider_url": json_data.get("provider_url"),
-                # "version": json_data.get("version"),
-            }
-            self.set_data_dict(data_dict)
-            return data_dict
-        #
-        elif platform_name == "linkedin":
-            data_dict = {
-                "url": url,
-                # "author_name": json_data.get("author_name"),
-                "author_url": json_data.get("author_url"),
-                "html": json_data.get("html"),
-                "width": json_data.get("width"),
-                "height": json_data.get("height"),
-                "type": json_data.get("type"),
-                # "cache_age": json_data.get("cache_age"),
-                "provider_name": json_data.get("provider_name"),
-                "provider_url": json_data.get("provider_url"),
-                # "version": json_data.get("version"),
-            }
-            self.set_data_dict(data_dict)
-            return data_dict
-        # Will work on Linkedin later, as it requires a different approach to fetch oEmbed data.
-        # elif platform_name == "linkedin":
-
+            self.set_data_dict(mapped_data)
+            return "success"
         else:
-            raise ValueError(f"Unsupported platform: {platform_name}")
-
-    
+            self.set_data_dict(data_dict)
+            return "already exist"
+        
 
     def format_url(self, url: str) -> str:
         """
@@ -218,11 +151,21 @@ class SocialOEmbed:
         Parameters:
             url (str): The original URL.
         """
+        try:
+            if self.is_url(url):   
+                formatted_url = url.split("?")[0]
+                return formatted_url
+        except ValueError:
+            return False
         
-        formatted_url = url.split("?")[0]
+    def is_url(self, url):
+        try:
+            result = urlparse(url)
+            return result.scheme in ("http", "https") and bool(result.netloc)
+        except ValueError:
+            return False    
         
-        
-        return formatted_url
+        # return formatted_url
 
 
 
