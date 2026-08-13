@@ -9,7 +9,7 @@ class LinkedInOEmbed(SocialOEmbed):
     A class to handle oEmbed for LinkedIn URLs.
     """
 
-    # PLATFORM_NAME = "linkedin"
+    PLATFORM_NAME = "linkedin"
     # OEMBED_ENDPOINT = f"https://www.linkedin.com/embed/feed/update/urn:li:{post_type}:{post_id}?collapsed=1" #"https://www.linkedin.com/embed/feed/update/urn:li:share:{share_id}?format=oembed"
 
     def __init__(self, url: str = None, run_fetch: bool = False):
@@ -32,7 +32,7 @@ class LinkedInOEmbed(SocialOEmbed):
             return None
 
         post_type, post_id = match.group(1), match.group(2)
-        OEMBED_ENDPOINT = f"https://www.linkedin.com/embed/feed/update/urn:li:{post_type}:{post_id}?collapsed=1"
+        OEMBED_ENDPOINT = f"https://www.linkedin.com/embed/feed/update/urn:li:{post_type}:{post_id}"
         return OEMBED_ENDPOINT, post_type
 
     def build_linkedin_embed(
@@ -56,22 +56,27 @@ class LinkedInOEmbed(SocialOEmbed):
 
         try:
             url = self.get_url()
-            
-            self.json_data = {
-                "url" : self.get_url(),
-                "author_url":  f"https://www.linkedin.com/in/{url.split('posts/')[1].split('_')[0]}/",
-                "html" : self.build_linkedin_embed(),
-                "height": 627,
-                "width": 504,
-                "type": self.get_linkedin_embed_url()[1],
-                "cache_age": "3153600000",
-                "provider": "LinkedIn",
-                "provider_url": "https://linkedin.com",
-            } 
-            
+            json_data = self.get_json_data()
+            # print(f"\n\nFetching oEmbed data for {url} from LinkedIn...{json_data}")
+            if json_data is None or not json_data:
+                json_data = {
+                    "url" : self.get_url(),
+                    "author_url":  f"https://www.linkedin.com/in/{url.split('posts/')[1].split('_')[0]}/",
+                    "html" : self.build_linkedin_embed(),
+                    "height": 627,
+                    "width": 504,
+                    "type": self.get_linkedin_embed_url()[1],
+                    "cache_age": "3153600000",
+                    "provider": "LinkedIn",
+                    "provider_url": "https://linkedin.com",
+                }
+                # print(json_data)  
+                self.set_json_data(json_data)
+                return json_data         
         except Exception as e:
             print(f"Error fetching oEmbed for {url}: {e}")
-            return None
+            return 
+    
 
 
 

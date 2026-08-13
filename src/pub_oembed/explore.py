@@ -15,9 +15,11 @@ linked = "https://www.linkedin.com/posts/ucbethuel_my-achievement-share-74834833
 
 lin = LinkedInOEmbed(linked, run_fetch=True)
 
-# print(x_twitter_oembed.fetch_data())
-
-print(lin.json_data, lin.get_data_dict)
+print(x_twitter_oembed.fetch_data())
+print(x_twitter_oembed.get_json_data())
+print(x_twitter_oembed.get_data_dict(), "Data Dict:-----")
+print(x_twitter_oembed.data_map(), "After mapping\n\n")
+print(x_twitter_oembed.get_data_dict(), "Data Dict:-----")
 
 # another_oembed = XTwitterOEmbed()
 
