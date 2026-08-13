@@ -4,7 +4,7 @@ import requests
 
 OEmbedKey = Literal[
     "url",
-    "author_name",
+    # "author_name",
     "author_url",
     "html",
     "width",
@@ -111,7 +111,7 @@ class SocialOEmbed:
         if platform_name == "x_twitter":
             self._data = {
                 "url": url,
-                "author_name": json_data.get("author_name"),
+                # "author_name": json_data.get("author_name"),
                 "author_url": json_data.get("author_url"),
                 "html": json_data.get("html"),
                 "width": json_data.get("width"),
@@ -125,7 +125,7 @@ class SocialOEmbed:
         elif platform_name == "tiktok":
             self._data = {
                 "url": url,
-                "author_name": json_data.get("author_name"),
+                # "author_name": json_data.get("author_name"),
                 "author_url": json_data.get("author_url"),
                 "html": json_data.get("html"),
                 "width": json_data.get("width"),
@@ -157,7 +157,7 @@ class SocialOEmbed:
         elif platform_name == "youtube":
             self._data = {
                 "url": url,
-                "author_name": json_data.get("author_name"),
+                # "author_name": json_data.get("author_name"),
                 "author_url": json_data.get("author_url"),
                 "html": json_data.get("html"),
                 "width": json_data.get("width"),
@@ -168,22 +168,21 @@ class SocialOEmbed:
                 "provider_url": json_data.get("provider_url"),
                 # "version": json_data.get("version"),
             }
-        #                 {
-        #   "title": "Why VDM will be the first to be evicted in the Big brother house 🤣🤣Kennyblaq",
-        #   "author_name": "Shortcut Comedian",
-        #   "author_url": "https://www.youtube.com/@shortcutcomedian4942",
-        #   "type": "video",
-        #   "height": 113,
-        #   "width": 200,
-        #   "version": "1.0",
-        #   "provider_name": "YouTube",
-        #   "provider_url": "https://www.youtube.com/",
-        #   "thumbnail_height": 360,
-        #   "thumbnail_width": 480,
-        #   "thumbnail_url": "https://i.ytimg.com/vi/wRTBDDUraH0/hqdefault.jpg",
-        #   "html": "<iframe width="200" height="113" src="https://www.youtube.com/embed/wRTBDDUraH0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Why VDM will be the first to be evicted in the Big brother house 🤣🤣Kennyblaq"></iframe>"
-        # }
-
+        #
+        elif platform_name == "linkedin":
+            self._data = {
+                "url": url,
+                # "author_name": json_data.get("author_name"),
+                "author_url": json_data.get("author_url"),
+                "html": json_data.get("html"),
+                "width": json_data.get("width"),
+                "height": json_data.get("height"),
+                "type": json_data.get("type"),
+                # "cache_age": json_data.get("cache_age"),
+                "provider_name": json_data.get("provider_name"),
+                "provider_url": json_data.get("provider_url"),
+                # "version": json_data.get("version"),
+            }
         # Will work on Linkedin later, as it requires a different approach to fetch oEmbed data.
         # elif platform_name == "linkedin":
 
