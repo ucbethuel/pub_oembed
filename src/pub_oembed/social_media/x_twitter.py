@@ -1,5 +1,3 @@
-from typing import Literal
-
 from pub_oembed.social_media.social_oembed import SocialOEmbed, platform_embed_endpoints
 # Token url
 # X - GET https://publish.x.com/oembed?url=<TWEET_URL>

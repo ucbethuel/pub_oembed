@@ -23,7 +23,7 @@ platform_embed_endpoints = {
     "x_twitter": "https://publish.x.com/oembed",
     "tiktok": "https://www.tiktok.com/oembed",
     "youtube": "https://www.youtube.com/oembed",
-    # "linkedin": "https://www.linkedin.com/oembed?",
+    # "linkedin": "https://www.linkedin.com/oembed?", 
 }
 
 
