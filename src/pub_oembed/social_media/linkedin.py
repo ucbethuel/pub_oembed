@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from pub_oembed.social_media.social_oembed import SocialOEmbed
+from pub_oembed.social_media.social_oembed import SocialOEmbed, logger
 
 
 class LinkedInOEmbed(SocialOEmbed):
@@ -74,7 +74,7 @@ class LinkedInOEmbed(SocialOEmbed):
                 self.set_json_data(json_data)
                 return json_data         
         except Exception as e:
-            print(f"Error fetching oEmbed for {url}: {e}")
+            logger.error(f"Error fetching oEmbed for {url}: {e}")
             return 
     
 

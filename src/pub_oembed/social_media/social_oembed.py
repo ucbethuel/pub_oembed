@@ -1,7 +1,7 @@
 from typing import Literal
 import requests
 from urllib.parse import urlparse
-
+import logging
 
 
 
@@ -25,6 +25,11 @@ platform_embed_endpoints = {
     "youtube": "https://www.youtube.com/oembed",
     # "linkedin": "https://www.linkedin.com/oembed?", 
 }
+
+logger = logging.getLogger(__name__)
+
+
+
 
 
 class SocialOEmbed:
@@ -72,12 +77,13 @@ class SocialOEmbed:
 
         if not url:
             raise ValueError("No URL provided.")
+            
 
         try:
             if self._json_data:
                 return self._json_data
 
-            print(
+            logger.info(
                 f"\n\nFetching oEmbed data for {url} "
                 f"from {self.OEMBED_ENDPOINT}..."
             )
@@ -101,7 +107,7 @@ class SocialOEmbed:
             return json_data
 
         except requests.RequestException as e:
-            print(f"Error fetching oEmbed for {url}: {e}")
+            logger.error(f"Error fetching oEmbed for {url}: {e}")
             return 
 
 
