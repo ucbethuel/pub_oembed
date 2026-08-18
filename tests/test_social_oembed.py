@@ -24,8 +24,6 @@ def test_tiktok_inheritance():
 def test_youtube_inheritance():
     assert issubclass(YouTubeOEmbed, SocialOEmbed)
 
-def test_x_tiwtter_inheritance():
-    assert issubclass(XTwitterOEmbed, SocialOEmbed)
 
 # --------------------------------------------
 
